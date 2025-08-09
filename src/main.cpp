@@ -13,6 +13,7 @@ dace::Drive chassis(
 
 );
 
+//comment out if not using tracking wheels
 dace::Odometry trackers(
 
 	1,//vertical tracking wheel 1
@@ -57,6 +58,30 @@ void opcontrol() {
 
 	while (true) {
 
+		//Joystick deadzone value(recommend 10)
+		const int DEADZONE = 10;
+
+		// Get joystick values
+		double forward = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+		double turn    = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
+		// Apply deadzone
+		if (std::abs(forward) < DEADZONE) forward = 0;
+		if (std::abs(turn) < DEADZONE) turn = 0;
+
+		// Arcade drive
+		double leftVoltage  = forward + turn;
+		double rightVoltage = forward - turn;
+
+		// Clamp to -127 || +127 voltage
+		leftVoltage  = std::clamp(leftVoltage,  -127.0, 127.0);
+		rightVoltage = std::clamp(rightVoltage, -127.0, 127.0);
+
+		// Send voltage to motors
+		chassis.setTank(leftVoltage, rightVoltage);
+
+		dace::clamp_opcontrol();
+		dace::intake_opcontrol();
 		pros::delay(10);
 	}
 }

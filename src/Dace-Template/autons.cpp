@@ -28,4 +28,28 @@ void pidTest(){
 
     chassis.drive(24,110); //distance in inches, speed
 
+    chassis.wait();
+
+    chassis.curve(100,20,90);
+    
+    chassis.wait();
+    
+    chassis.swing(swing::Left, 90, 75);
+
+    chassis.wait();
+    
+    chassis.turn_to_heading(90,90);
+}
+
+void subsystems_example(){
+
+    dace::set_clamp(true);
+
+    dace::set_intake(127);
+
+    pros::delay(2000);
+
+    dace::set_intake(0);
+
+    dace::set_clamp(false);
 }
