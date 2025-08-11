@@ -58,28 +58,25 @@ void opcontrol() {
 
 	while (true) {
 
-		//Joystick deadzone value(recommend 10)
-		const int DEADZONE = 10;
+		//Pick a driving style
 
-		// Get joystick values
-		double forward = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-		double turn    = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+		/*
+		the number in the () is the deadzone 10 is an ideal number
+		*/
+	
+		//Uses left analog Y for fwd/rev and right analog X for lateral motion
+		dace::arcade_drive(10);
 
-		// Apply deadzone
-		if (std::abs(forward) < DEADZONE) forward = 0;
-		if (std::abs(turn) < DEADZONE) turn = 0;
+		//Uses left analog Y to control the left side of chassis
+		//Uses right Analog Y to control right side of chassis
+		//Push both up/down at same time to go fwd/rev
+		//dace::tank_drive(10);
 
-		// Arcade drive
-		double leftVoltage  = forward + turn;
-		double rightVoltage = forward - turn;
+		//Uses one sitck for fwd/rev (Y) and lateral motion (X)
+		//dace::single_stick_drive(dace::Stick::Right, 10);
+		//dace::single_stick_drive(dace::Stick::Left, 10);
 
-		// Clamp to -127 || +127 voltage
-		leftVoltage  = std::clamp(leftVoltage,  -127.0, 127.0);
-		rightVoltage = std::clamp(rightVoltage, -127.0, 127.0);
-
-		// Send voltage to motors
-		chassis.setTank(leftVoltage, rightVoltage);
-
+		//Examples of subsystems
 		dace::clamp_opcontrol();
 		dace::intake_opcontrol();
 		pros::delay(10);

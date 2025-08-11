@@ -81,6 +81,7 @@ void opcontrol(void);
 #include "Dace-Template/PID/pid.hpp"
 #include "Dace-Template/util.hpp"
 #include "Dace-Template/subsystems.hpp"
+#include "Dace-Template/drive/opControl.hpp"
 
 //#include <iostream>
 #endif
